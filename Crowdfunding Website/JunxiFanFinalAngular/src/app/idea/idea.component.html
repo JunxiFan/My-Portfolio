@@ -1,0 +1,82 @@
+<div class="page-header">
+  <h1>Ideas</h1>
+  <p>Category ID: {{cateIdString}}</p>
+</div>
+<br/>
+
+<div class="row">
+
+  <!-- <span>
+    <button class="btn btn-success" (click)="refreshCate()">
+      <i class='fa fa-refresh'></i>
+    </button>
+  </span> -->
+  <!-- 搜索 -->
+  <!-- <span class="form-inline">
+      <span class="input-group add-on">
+        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text" [(ngModel)]="cate.cateDesc">
+        <div class="input-group-btn">
+          <button class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </span>
+    </span> -->
+
+
+</div>
+
+<!-- view 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="col-md-1 text-center"> </th>
+        <th class="col-md-1 text-center"> Idea ID</th>
+        <th class="col-md-1 text-center"> category ID</th>
+        <th class="col-md-1 text-center"> Creator ID</th>
+        <th class="col-md-1 text-center"> Status</th>
+        <th class="col-md-1 text-center">Create Date</th>
+        <th class="col-md-1 text-center">Name</th>
+        <th class="col-md-3 text-center">Desc</th>
+        <th class="col-md-1 text-center">End Date</th>
+        <th class="col-md-1 text-center">Aim Amount</th>
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let idea of ideas" class="text-center">
+        <td>
+          <button *ngIf="idea.ideaStatus == 'new'" type="button" class="btn btn-danger" (click)="disableIdea(idea)">Disable </button>
+          <!-- <button *ngIf="cate.cateStatus as 'disabled'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Enable </button> -->
+        </td>
+        <td>{{idea.ideaId}}</td>
+        <td>{{idea.cateId}}</td>
+        <td>{{idea.userId}}</td>
+        <td>{{idea.ideaStatus}}</td>
+        <td>{{idea.createdOn}}</td>
+        <td>{{idea.ideaName}}</td>
+        <td>{{idea.ideaDesc}}</td>
+        <td>{{idea.ideaEnddate}}</td>
+        <td>{{idea.ideaAim}}</td>
+
+        <td>
+
+          <button type="button" class="btn btn-success fa fa-eye" (click)="viewIdeaFunding(idea)">View Fundings</button>
+          <button type="button" class="btn btn-info fa fa-book" (click)="viewIdeaService(idea)">View Service</button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br/>
+<br/>

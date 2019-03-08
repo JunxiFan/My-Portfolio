@@ -1,0 +1,123 @@
+/* You can add global styles to this file, and also import other style files */
+.flexabled{
+    display: -webkit-box; /* �ϰ汾�﷨: Safari, iOS, Android browser, older WebKit browsers. */
+    display: -moz-box; /* �ϰ汾�﷨: Firefox (buggy) */
+    display: -ms-flexbox; /* ��ϰ汾�﷨: IE 10 */
+    display: -webkit-flex; /* �°汾�﷨: Chrome 21+ */
+    display: flex; /* �°汾�﷨: Opera 12.1, Firefox 22+ */
+   }
+   .flex-direction-column{
+    /* ���õ��Բ��ֵķ�����Ԫ�ذ�����Դ�ĵ���������˳����ϵ�����ʾ */
+    -webkit-box-orient: vertical;/* android 2.1-3.0, ios 3.2-4.3 */
+    -webkit-flex-direction: column;/* Chrome 21+ */
+    -ms-flex-direction: column;/* WP IE 10 */
+    flex-direction: column;/* android 4.4 */
+   }
+   .flex-1{
+    /* ��Ԫ���Զ�ռ��ʣ��Ŀռ� */
+    -webkit-box-flex:1;/* android 2.1-3.0, ios 3.2-4.3 */
+    -webkit-flex:1;/* `Chrome 21+ */
+    -ms-flex:1;/* WP IE 10 */
+    flex:1;/* android 4.4 */
+   }
+   
+   .fa {
+       padding: 10px;
+       width: 36px;
+       text-align: center;
+       text-decoration: none;
+       margin: 5px 2px;
+       border-radius: 50%;
+      }
+      .fa:hover {
+       opacity: 0.7;
+      }
+      
+      .fa-facebook {
+       background: #3B5998;
+       color: white;
+      }
+      
+      .fa-twitter {
+       background: #55ACEE;
+       color: white;
+      }
+      
+      .fa-google {
+       background: #dd4b39;
+       color: white;
+      }
+      
+      .fa-youtube {
+       background: #bb0000;
+       color: white;
+      }
+      
+      .fa-instagram {
+       background: #125688;
+       color: white;
+      }
+
+
+
+
+      li{list-style:none;} 
+
+      .btn-table{
+          padding: .1rem .75rem;
+      }
+      
+      .nav-left{
+          padding: 0;
+      }
+      #nav-list-group{
+          text-indent:1em;
+      }
+      
+      .nav-grouplist-header{
+          color:aliceblue; 
+          justify-content: space-between;
+          border-bottom:0px;
+      }
+      
+      .stars {
+          overflow: hidden; 
+          clear: both;
+          margin: 10px;
+          padding: 10px;
+          /* border: 1px saddlebrown solid; */
+      }
+      
+      
+      
+      .stars p {
+          font-size: 20px;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          float: left;
+          margin-right: 1px;
+          background: rgb(88, 88, 88);
+          color: #fff;
+          text-align: center;
+          cursor: default;
+          font-style: normal;
+      }
+      
+      .stars .on {
+          color: #ffe600;
+      }
+      
+      /* product gallery */
+      .product-gallery {
+        position: relative;
+        padding-top: 74px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+        padding-left: 15px;
+        border: 1px solid #e1e7ec;
+        border-radius: 7px;
+      }
+      a{  
+        text-decoration:none;  
+}  

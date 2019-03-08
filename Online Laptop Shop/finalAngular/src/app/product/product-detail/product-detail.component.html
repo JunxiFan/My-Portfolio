@@ -1,0 +1,376 @@
+<div class="offcanvas-wrapper">
+
+  <!-- Page Content-->
+  <div class="container padding-bottom-3x mb-1">
+    <div class="row">
+      <!-- Poduct Gallery-->
+      <div class="col-md-6">
+
+        <div id="carouselExampleIndicators" class="carousel slide my-5" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="./assets/img/shop/single/01.jpg" alt="First slide" height="350">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="./assets/img/shop/single/02.jpg" alt="Second slide" height="350">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="./assets/img/shop/single/03.jpg" alt="Third slide" height="350">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="./assets/img/shop/single/04.jpg" alt="Third slide" height="350">
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="./assets/img/shop/single/05.jpg" alt="Third slide" height="350">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+
+      </div>
+      <!-- Product Info-->
+      <div class="col-md-6">
+        <div class="padding-top-2x mt-2 hidden-md-up"></div>
+        <div class="rating-stars">
+          <i class="icon-star filled"></i>
+          <i class="icon-star filled"></i>
+          <i class="icon-star filled"></i>
+          <i class="icon-star filled"></i>
+          <i class="icon-star"></i>
+        </div>
+        <span class="text-muted align-middle">{{laptop.lapBrand}}</span>
+        <h2 class="padding-top-1x text-normal">{{laptop.lapName}}</h2>
+        <span class="h2 d-block">${{laptop.lapPrice}}</span>
+        <div class="text-muted text-normal">Description</div>
+        <p>{{laptop.lapDesc}}</p>
+        <hr class="mb-3">
+        <form ngForm #cartForm="ngForm">
+          <div class="row margin-top-1x">
+
+            <div class="col-8">
+              <div class="form-group">
+                <label class="control-label" for="spec">Specifications:</label>
+                <select class="form-control" id="spec" name="spec" [(ngModel)]="selectedNum" #spec="ngModel" (change)="updateLaptop(selectedNum)"
+                  required>
+                  <option *ngFor="let spec of specsString; index as i" value="{{i}}">{{spec}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label class="control-label" for="amount">Amount:</label>
+                <input class="form-control" type="number" name="amount" id="amount" ngModel #amount="ngModel" value="1" min="1" pattern="^\d+$"
+                  required/>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="amount.invalid && (amount.dirty || amount.touched)" class="mt-2">
+            <div *ngIf="amount.errors.required" class="alert alert-danger mb-1">
+              Amount is required
+            </div>
+            <div *ngIf="amount.errors.pattern" class="alert alert-danger mb-1">
+              Amount must be an integer.
+            </div>
+          </div>
+        </form>
+
+
+        <hr class="mb-3">
+        <div class="d-flex flex-wrap justify-content-between">
+          <div class="entry-share mt-2 mb-2">
+
+            <div>
+              <span class="text-muted">Share:</span>
+              <a href="https://www.facebook.com" class="fa fa-facebook" data-toggle="popover" data-trigger="hover" data-placement="top"
+                title="Share on:" data-content="Facebook"></a>
+              <a href="https://www.instagram.com" class="fa fa-instagram" data-toggle="popover" data-trigger="hover" data-placement="top"
+                title="Share on:" data-content="Instagram"></a>
+              <a href="https://www.youtube.com" class="fa fa-youtube" data-toggle="popover" data-trigger="hover" data-placement="top" title="Share on:"
+                data-content="Youtube"></a>
+              <a href="https://www.twitter.com" class="fa fa-twitter" data-toggle="popover" data-trigger="hover" data-placement="top" title="Share on:"
+                data-content="Twitter"></a>
+              <a href="https://www.google.com" class="fa fa-google" data-toggle="popover" data-trigger="hover" data-placement="top" title="Share on:"
+                data-content="Google"></a>
+            </div>
+          </div>
+          <div class="sp-buttons mt-2 mb-2">
+            <button class="btn btn-primary" [disabled]="cartForm.invalid" (click)="addToCart(cartForm)">
+              <span class="oi oi-cart"></span> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Product Tabs-->
+    <div class="row padding-top-3x mb-3">
+      <div class="col-lg-10 offset-lg-1">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" href="#description" data-toggle="tab" role="tab">Description</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#reviews" data-toggle="tab" role="tab">Reviews</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="description" role="tabpanel">
+            <p>Tackle the gaming world with this 15-inch Dell Alienware laptop. Its NVIDIA GeForce GTX 1070 graphics card provides
+              high-definition images, and its Intel Core i7-7700HQ processor and 16GB of RAM ensure that even the most demanding
+              games run smoothly. This Dell Alienware laptop has a 1TB hard drive to save all your gaming data.
+            </p>
+            <!--zhedie-->
+            <div id="accordion">
+              <!--First-->
+              <div class="card">
+                <div class="card-header">
+                  <h3>Specifications
+                    <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="float: right;">
+                      <span class="oi oi-grid-three-up"></span>
+                    </a>
+                  </h3>
+                </div>
+                <div id="collapseOne" class="collapse show">
+                  <div class="card-body">
+                    <!--Column Layout-->
+                    <div class="container">
+
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h4>Key Specs</h4>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>Screen Size
+                            <br/> Touch Screen
+                            <br/> Storage Type
+                            <br/> Hard Drive Type
+                            <br/> Graphics
+                            <br/> Processor Speed (Base)
+                            <br/> Processor Model
+                            <br/> Processor Model Number
+                            <br/> Operating System</h5>
+                          <br/>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>15.6 inches
+                            <br/> No
+                            <br/> HDD, SSD
+                            <br/> SATA + Solid State Drive
+                            <br/> NVIDIA GeForce GTX 1070
+                            <br/> 2.8 gigahertz
+                            <br/> Intel 7th Generation Core i7
+                            <br/> i7-7700HQ
+                            <br/> Windows 10</h5>
+                          <br/>
+
+                        </div>
+                      </div>
+                    </div>
+                    <hr style="height:1px;border:none;border-top:1px solid #bebebe;" />
+                    <br/>
+
+                    <div class="container">
+
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h4>Feature</h4>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>Windows Features
+                            <br/> 2-in-1 Design
+                            <br/> Ultrabook
+                            <br/> Keyboard Touch Screen
+                            <br/> Touchpad Type
+                            <br/> Backlit Keyboard
+                            <br/> Stylus Dock
+                            <br/> Cooling System
+                            <br/> Cable Lock Slot
+                            <br/> Operating System Architecture</h5>
+                          <br/>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>Windows Hello
+                            <br/> No
+                            <br/> No
+                            <br/> Yes
+                            <br/> APA Touchpad
+                            <br/> Yes
+                            <br/> None
+                            <br/> Air
+                            <br/> K-Slot
+                            <br/> 64-bit
+                          </h5>
+                          <br/>
+                        </div>
+                      </div>
+                    </div>
+                    <hr style="height:1px;border:none;border-top:1px solid #bebebe;" />
+                    <br/>
+                    <br/>
+
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h4>Display</h4>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>Screen Resolution
+                            <br/> Display Type
+                            <br/> Wireless Display</h5>
+                          <br/>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>1920 x 1080 (Full HD)
+                            <br/> Widescreen LCD
+                            <br/> No
+                          </h5>
+                          <br/>
+                        </div>
+                      </div>
+                    </div>
+                    <hr style="height:1px;border:none;border-top:1px solid #bebebe;" />
+                    <br/>
+                    <br/>
+
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <h4>Network</h4>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>Wireless Networking
+                            <br/> Ethernet
+                            <br/> Number Of Ethernet Ports</h5>
+                          <br/>
+                        </div>
+                        <div class="col-sm-3">
+                          <h5>Wireless-A, B, G, N
+                            <br/> Gigabit Ethernet
+                            <br/> 1
+                          </h5>
+                          <br/>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--Column Layout end-->
+                  </div>
+                </div>
+              </div>
+              <!--Second-->
+              <div class="card">
+                <div class="card-header">
+                  <h3>From the Manufacturer
+                    <a class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" style="float: right;">
+                      <span class="oi oi-grid-three-up"></span>
+                    </a>
+                  </h3>
+                </div>
+                <div id="collapseTwo" class="collapse">
+                  <div class="card-body">
+                    <!--Layout-->
+                    <div>
+                      <ul class="list-group">
+                        <li class="list-group-item">
+                          <video style="width: 100%;" src="./assets/vedio/alien.mp4" controls>Your browser does not support video tags</video>
+                        </li>
+                        <li class="list-group-item">
+                          <img src="./assets/img/Manufacturer/01.jpg" alt="Computer pic" style="float: left;" width="360">
+                          <h5 class="card-title">STAY IN THE GAME.</h5>
+                          <p align="justify">Experience gaming on a whole new level with a next-generation NVIDIA GeForce GTX 10-series GPU.
+                            Harness enough power to fuel 100W graphics cards, as well as overclocked i7 K-series processors
+                            – allowing for 4k gaming and ready for VR. The Alienware 15 supports DDR4 memory with capacities
+                            ranging from 8GB to 32GB and speeds ranging from 2400 MHz to 2667 MHz delivering exceptional
+                            experiences as well as a roadmap for upgrades. The Alienware 15 is the perfect balance of power
+                            and portability and is made with premium materials for an overall higher quality build. Magnesium
+                            alloy ensures structural rigidity, copper allows for optimal thermal management for maximum performance,
+                            and reinforced steel contributes to the overall tactile comfort.</p>
+                        </li>
+                        <li class="list-group-item">
+                          <img src="./assets/img/Manufacturer/02.jpg" alt="Computer pic" style="float: right;" width="360">
+                          <h5 class="card-title">NOTHING BETWEEN YOU AND GAMING.</h5>
+                          <p align="justify">The 15" FHD display is designed to deliver the smoothest gaming experience with 4ms response time,
+                            wide viewing angles, 350 nits of brightness and NVIDIA G-sync technology on select modules. NVIDIA
+                            G-sync delivers the smoothest a fastest experience ever thanks to its ability to synchronize
+                            display refresh rates to the GPU in your GeForce GTX-powered PC, eliminating screen tearing and
+                            minimizing both display stutter and input lag.
+                          </p>
+                        </li>
+
+                      </ul>
+                    </div>
+                    <!--Layout end-->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--zhedie end-->
+
+          </div>
+          <div class="tab-pane fade" id="reviews" role="tabpanel">
+            <!-- Review-->
+            <!-- Review-->
+            <!-- Review Form-->
+            <h5 class="mb-30 padding-top-1x">Leave Review</h5>
+            <form class="row" method="post">
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="review_name">Your Name</label>
+                  <input class="form-control form-control-rounded" type="text" id="review_name" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="review_email">Your Email</label>
+                  <input class="form-control form-control-rounded" type="email" id="review_email" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="review_subject">Subject</label>
+                  <input class="form-control form-control-rounded" type="text" id="review_subject" required>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="form-group">
+                  <label for="review_rating">Rating</label>
+                  <select class="form-control form-control-rounded" id="review_rating">
+                    <option>5 Stars</option>
+                    <option>4 Stars</option>
+                    <option>3 Stars</option>
+                    <option>2 Stars</option>
+                    <option>1 Star</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="review_text">Review </label>
+                  <textarea class="form-control form-control-rounded" id="review_text" rows="8" required></textarea>
+                </div>
+              </div>
+              <div class="col-12 text-right">
+                <button class="btn btn-outline-primary" type="submit">Submit Review</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

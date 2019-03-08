@@ -1,0 +1,111 @@
+<div class="page-header">
+  <h1>Selected Bid</h1>
+  userId: {{userId}}
+</div>
+<br/>
+
+<div class="row">
+  <span>
+    <button class="btn btn-success" (click)="refresh()">
+      <i class='fa fa-refresh'></i>
+    </button>
+  </span>
+  <!-- 查看将要超出完成时间的bid -->
+  <span>
+    <button class="btn btn-danger" (click)="getBidIndanger()">Bids in Danger</button>
+  </span>
+</div>
+<!-- view 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+
+        <th class="col-md-1 text-center"> Bid ID</th>
+        <th class="col-md-1 text-center"> Status</th>
+        <th class="col-md-1 text-center"> Delivery Date</th>
+        <th class="col-md-1 text-center"> Bid Amount</th>
+        <th class="col-md-5 text-center"> Description</th>
+        <th class="col-md-1 text-center">Service ID</th>
+        <th class="col-md-1 text-center">Startup ID</th>
+
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let bid of bids" class="text-center">
+        <!-- <td> -->
+        <!-- <button *ngIf="fund.ideaStatus == 'new'" type="button" class="btn btn-danger" (click)="disableIdea(idea,disableModal)">Disable </button> -->
+        <!-- <button *ngIf="cate.cateStatus as 'disabled'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Enable </button> -->
+        <!-- </td> -->
+        <td>{{bid.bidId}}</td>
+        <td>{{bid.bidStatus}}</td>
+        <td>{{bid.deliverydate}}</td>
+        <td>{{bid.bidAmount}}</td>
+        <td>{{bid.bidDesc}}</td>
+        <td>{{bid.servId}}</td>
+        <td>{{bid.suId}}</td>
+
+        <td>
+          <!-- <button *ngIf="isStartup()" type="button" class="btn btn-warning fa fa-edit" (click)="createBid(service,buyModal)">Bid </button> -->
+          <button *ngIf="isCreator() && !isSelected(bid)" type="button" class="btn btn-book fa fa-edit" (click)="selectBid(bid)">Select</button>
+          <button *ngIf="isSelected(bid)" type="button" class="btn btn-primary fa fa-edit" (click)="viewReport(bid)">View Report</button>
+
+          <button *ngIf="isStartup()" type="button" class="btn btn-info fa fa-edit" (click)="writeReport(bid, reportModal)">Write Report</button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br/>
+<br/>
+
+<div class="row">
+  <modal #reportModal>
+    <modal-header>
+      <h1>Add a report</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <form ngForm #MyEditForm="ngForm">
+
+        <div class="form-group">
+          <label class="control-label" for="bidId">Bid ID</label>
+          <input type="text" id="bidId" [(ngModel)]="bidIdForReport" #servId="ngModel" name="bidId" disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="repoDesc">Description</label>
+          <input type="text" id="repoDesc" [(ngModel)]="report.repoDesc" name="repoDesc" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="progress" class="control-label">Progress %</label>
+          <input type="text" id="progress" [(ngModel)]="report.progress" name="progress" #progress="ngModel" pattern="[0-9]*" class="form-control"
+            required>
+
+          <div *ngIf="(!MyEditForm.pristine && !MyEditForm.valid)">
+            <div *ngIf="!progress.valid && progress.errors.required">Progress(%) is required</div>
+            <div *ngIf="!progress.valid && progress.errors.pattern">Please enter a correct number</div>
+          </div>
+        </div>
+
+
+
+      </form>
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" [disabled]="MyEditForm.invalid" (click)="onWriteReport(MyEditForm);reportModal.close()">Submit</button>
+      <button class="btn btn-primary" (click)="reportModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Title</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	 crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+	 crossorigin="anonymous"></script>
+	<!-- <script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js">
+	 </script> -->
+</head>
+
+<body>
+
+	<div>
+		<form>
+			Enter text and hit enter:
+			<input type="text" id='input' name="mes" />
+			<input type="submit" id="submit" value="Submit" />
+		</form>
+		<h1>Data is displayed below</h1>
+		<h4 id='show'></h4>
+	</div>
+	<div>
+		<form id = 'loginForm'>
+			username:
+			<input type="text" id='username' name="username" /> 
+			
+			password:
+			<input type="text" id='password' name="password" />
+			<input type="submit" id="register" value="Submit" />
+		</form>
+	</div>
+	<script type="text/javascript">
+
+
+
+		function show() {
+			$.ajax({
+				url: "/api/show",
+				// async: false,
+				// dataType: "json",
+				// dataType:JSON,
+				success: function (result) {
+					$.each(result, function (i, n) {
+						$("#show").append(n.message + '<br>')
+					})
+				}
+			})
+		}
+		// 在页面加载时，show
+		$(document).ready(function () {
+			show();
+		})
+
+		$('form').submit(function () {
+			var textValue = $('#input').val();
+			console.log(textValue);
+			if (textValue != '') {
+				$.ajax({
+					url: '/api/insert?mes=' + textValue,
+					success: function (params) {
+						// textValue = '';
+					}
+				})
+			}
+
+
+		})
+
+
+	</script>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<div class="page-header">
+  <h1>New Idea List</h1>
+  {{roleId}}
+</div>
+<br/>
+<!-- *ngIf="!isCreator" -->
+<!-- search New Idea by CateId -->
+<div class="row">
+  <!-- 添加按钮 -->
+  <span *ngIf="isCreator()">
+    <button type="button" style="font-size:1em;" class="btn btn-success btn-circle" [ngClass]="{'active ':!addEnabled,'disabled':addEnabled}"
+      (click)="toggleAdd()">
+      <i class='fa fa-plus'></i> Create An Idea
+    </button>
+  </span>
+
+  <span *ngIf="!isStartup()" class="form-inline">
+    <span class="input-group add-on">
+      <form ngForm #searchForm="ngForm" (ngSubmit)="getNewIdeasByCateId(searchForm)">
+        <input [(ngModel)]="cateIdForSearch" class="form-control" placeholder="Search Ideas By CateId" name="srch-term" id="srch-term"
+          type="text">
+        <div class="input-group-btn">
+          <button [disabled]="searchForm.invalid" class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </form>
+    </span>
+  </span>
+</div>
+
+<!-- 新建idea功能 -->
+<div *ngIf="addEnabled">
+  <div class="page-header">
+    <h3>Add Idea</h3>
+  </div>
+  <div *ngIf="(!addIdeaForm.pristine && !addIdeaForm.valid)" class="row alert alert-danger">
+
+    <div *ngIf="(cateId.touched || cateId.dirty )&& !cateId.valid">
+      <div *ngIf="cateId.errors.required">Cate ID is required</div>
+      <div *ngIf="cateId.errors.pattern">CateId: Only numbers</div>
+    </div>
+
+    <div *ngIf="(ideaName.touched || ideaName.dirty )&& !ideaName.valid">
+      <div *ngIf="ideaName.errors.required">Idea Name is required</div>
+    </div>
+
+    <div *ngIf="(ideaEnddate.touched || ideaEnddate.dirty )&& !ideaEnddate.valid">
+      <div *ngIf="ideaEnddate.errors.required">Idea Name is required</div>
+      <div *ngIf="ideaEnddate.errors.pattern">End Date: Please enter date correctly</div>
+    </div>
+
+    <div *ngIf="(ideaAim.touched || ideaAim.dirty )&& !ideaAim.valid">
+      <div *ngIf="ideaAim.errors.required">Aim is required</div>
+      <div *ngIf="ideaAim.errors.pattern">ideaAim: Only numbers</div>
+    </div>
+
+
+
+  </div>
+  <form ngForm #addIdeaForm="ngForm" (ngSubmit)="addIdea(addIdeaForm,addSuccModal)">
+
+    <div class="form-group">
+      <label for="cateId" class="control-label">Cate ID</label>
+      <input type="text" ngModel name="cateId" id="cateId" pattern="[0-9]*" #cateId="ngModel" class="form-control" minlength="1"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="ideaName" class="control-label">Idea Name</label>
+      <input type="text" ngModel name="ideaName" id="ideaName" #ideaName="ngModel" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="ideaDesc" class="control-label">Description</label>
+      <input type="text" ngModel name="ideaDesc" id="ideaDesc" #ideaDesc="ngModel" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="ideaEnddate" class="control-label">End Date</label>
+      <input type="date" ngModel name="ideaEnddate" id="ideaEnddate" #ideaEnddate="ngModel" class="form-control" pattern="^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="ideaAim" class="control-label">Aim Amount</label>
+      <input type="text" ngModel name="ideaAim" id="ideaAim" pattern="[0-9]*" #ideaAim="ngModel" class="form-control" minlength="1"
+        required>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" [disabled]="addIdeaForm.invalid" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+<!-- view 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="col-md-1 text-center"> </th>
+        <th class="col-md-1 text-center"> Idea ID</th>
+        <th class="col-md-1 text-center"> category ID</th>
+        <th class="col-md-1 text-center"> Creator ID</th>
+        <th class="col-md-1 text-center"> Status</th>
+        <th class="col-md-1 text-center">Create Date</th>
+        <th class="col-md-1 text-center">Name</th>
+        <th class="col-md-3 text-center">Desc</th>
+        <th class="col-md-1 text-center">End Date</th>
+        <th class="col-md-1 text-center">Aim Amount</th>
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let idea of ideas" class="text-center">
+        <td>
+
+        </td>
+        <td>{{idea.ideaId}}</td>
+        <td>{{idea.cateId}}</td>
+        <td>{{idea.userId}}</td>
+        <td>{{idea.ideaStatus}}</td>
+        <td>{{idea.createdOn}}</td>
+        <td>{{idea.ideaName}}</td>
+        <td>{{idea.ideaDesc}}</td>
+        <td>{{idea.ideaEnddate}}</td>
+        <td>{{idea.ideaAim}}</td>
+
+        <td>
+
+          <button *ngIf="isCreator()" type="button" class="btn btn-success fa fa-eye" (click)="creatorViewIdeaFunding(idea)">View Fundings</button>
+          <button *ngIf="isFunder()" class="btn btn-success fa fa-eye" (click)="funderViewIdeaFunding(idea)">View Fundings</button>
+          <button *ngIf="isStartup()" class="btn btn-success fa fa-eye" (click)="suViewIdeaService(idea)">View Service</button>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row">
+    <modal #addSuccModal>
+      <modal-header>
+        <h1>Add Idea Succeed</h1>
+      </modal-header>
+  
+      <modal-content class="row">
+        Thank you!
+      </modal-content>
+      <modal-footer>
+        <button class="btn btn-primary" (click)="addSuccModal.close()">close</button>
+      </modal-footer>
+    </modal>
+  </div>

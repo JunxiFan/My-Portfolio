@@ -1,0 +1,47 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="nav-left col-xs-12 col-sm-4 col-md-3 col-lg-2 bg-dark">
+      <div class="card bg-dark">
+        <div class="flexabled card-header nav-grouplist-header" data-toggle="collapse" data-target="#collapseListGroup1" role="tab">
+          Commodity
+          <span class="oi oi-chevron-bottom"></span>
+        </div>
+        <div id="collapseListGroup1" class="collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+          <ul class="list-group " id="nav-list-group">
+            <li>
+              <a class="list-group-item bg-secondary text-light" [routerLink]="['laptop']" routerLinkActive="router-link-active">
+                Laptops
+              </a>
+            </li>
+            <li>
+              <a class="list-group-item bg-secondary text-light" [routerLink]="['accessories']" routerLinkActive="router-link-active">
+                Accessories
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card bg-dark">
+        <div class="flexabled card-header nav-grouplist-header" data-toggle="collapse" data-target="#collapseListGroup2" role="tab"
+          style="color:aliceblue; justify-content: space-between">
+          Users
+          <span class="oi oi-chevron-bottom"></span>
+        </div>
+        <div id="collapseListGroup2" class="collapse" role="tabpanel" aria-labelledby="collapseListGroupHeading2">
+          <ul class="list-group" id="nav-list-group">
+            <li>
+              <a class="list-group-item bg-secondary text-light" [routerLink]="['stuff']" routerLinkActive="router-link-active" >Stuff</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-8 col-md-9 col-lg-10" style="height: 0rem; padding-bottom: 50rem">
+      <router-outlet></router-outlet>
+    </div>
+
+    <!-- <iframe style="height:1000px" class="col-xs-12 col-sm-8 col-md-9 col-lg-10" src="adminlaptop" frameborder="0"></iframe> -->
+  </div>
+</div>

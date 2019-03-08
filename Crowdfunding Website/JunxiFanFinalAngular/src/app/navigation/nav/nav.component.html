@@ -1,0 +1,57 @@
+<nav class="navbar navbar-light bg-faded">
+  <a class="navbar-brand" [routerLink]="['home']">{{intro}}</a>
+  <ul class="nav navbar-nav">
+    <!-- Admin -->
+    <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['category']">Category</a>
+    </li>
+    <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['role']">Role</a>
+    </li>
+    <li *ngIf="isAdmin()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['users']">User</a>
+    </li>
+
+    <!-- funder -->
+    <li *ngIf="isFunder()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['funder/idea']">View Ideas</a>
+    </li>
+    <li *ngIf="isFunder()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['cart']">Cart</a>
+    </li>
+
+    <!-- creator -->
+    <li *ngIf="isCreator()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['creator/idea']">View & Add Ideas</a>
+    </li>
+
+    <li *ngIf="isCreator()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['creator/myidea']">My Ideas</a>
+    </li>
+
+    <!-- <li *ngIf="isCreator()" class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link" [routerLink]="['creator/myservice']">My Service</a>
+      </li> -->
+
+    <!-- startup -->
+    <li *ngIf="isStartup()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['startup/idea']">View Ideas</a>
+    </li>
+
+    <li *ngIf="isStartup()" class="nav-item" [routerLinkActive]="['active']">
+        <a class="nav-link" [routerLink]="['startup/mybid']">My Bid</a>
+      </li>
+
+    <!-- 注册 -->
+    <li *ngIf="isGuest()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['register']">Register</a>
+    </li>
+  </ul>
+  <!-- logout -->
+  <ul class="nav navbar-nav navbar-right">
+    <li *ngIf="!isGuest()" class="nav-item" [routerLinkActive]="['active']">
+      <a class="nav-link" [routerLink]="['login']">Logout</a>
+    </li>
+  </ul>
+
+</nav>

@@ -1,0 +1,249 @@
+<div class="page-header">
+  <h1>User List</h1>
+</div>
+<br/>
+
+<div class="row">
+   <!-- 添加按钮 -->
+   <span>
+      <button type="button" style="font-size:1em;" class="btn btn-success btn-circle" [ngClass]="{'active ':!addEnabled,'disabled':addEnabled}"
+        (click)="toggleAdd()">
+        <i class='fa fa-plus'></i>
+      </button>
+    </span>
+  <!-- 刷新 -->
+  <span>
+    <button class="btn btn-success" (click)="refreshUser()">
+      <i class='fa fa-refresh'></i>
+    </button>
+  </span>
+  <!-- 搜索 creator-->
+  <span class="form-inline">
+    <span class="input-group add-on">
+      <form ngForm #searchForm="ngForm" (ngSubmit)="searchCreatorByName(searchForm)">
+        <input [(ngModel)]="creatorNameForSearch" class="form-control" placeholder="Search Creator By Name" name="srch-term" id="srch-term"
+          type="text">
+        <div class="input-group-btn">
+          <button [disabled]="searchForm.invalid" class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </form>
+    </span>
+  </span>
+
+  <!-- 搜索startup -->
+  <span class="form-inline">
+    <span class="input-group add-on">
+      <form ngForm #searchSuForm="ngForm" (ngSubmit)="searchStartupByName(searchSuForm)">
+        <input [(ngModel)]="suCompNameForSearch" class="form-control" placeholder="Search Startup By Comp Name" name="srch-term"
+          id="srch-term" type="text">
+        <div class="input-group-btn">
+          <button [disabled]="searchSuForm.invalid" class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </form>
+    </span>
+  </span>
+
+ <!-- 查看不活跃的creator -->
+  <span>
+      <button class="btn btn-danger" (click)="getInactiveCreators()">Lazy Creators</button>
+    </span>
+
+     <!-- 查看未按时提交的startup -->
+  <span>
+      <button class="btn btn-danger" (click)="getDishonestStartups()">Dishonest Startups</button>
+    </span>
+  
+</div>
+
+<!-- 新建另一个admin -->
+<div *ngIf="addEnabled">
+    <div class="page-header">
+      <h3>Add Another admin</h3>
+    </div>
+    <div *ngIf="(!userForm.pristine && !userForm.valid)" class="row alert alert-danger">
+     
+      <div *ngIf="(username.touched || username.dirty )&& !username.valid">
+        <div *ngIf="username.errors.required">username is required</div>
+      </div>
+  
+      <div *ngIf="(password.touched || password.dirty )&& !password.valid">
+        <div *ngIf="password.errors.required">password is required</div>
+        <div *ngIf="password.errors.minlength">password Minmum is {{password.errors.minlength.requiredLength}}</div>
+      </div>
+  
+      <div *ngIf="(nm.touched || nm.dirty )&& !nm.valid">
+        <div *ngIf="nm.errors.required">name is required</div>
+      </div>
+    </div>
+    <form ngForm #userForm="ngForm" (ngSubmit)="userRegister(userForm,registerModal)">
+      
+  
+      <div class="form-group">
+        <label for="username" class="control-label">username</label>
+        <input type="text" ngModel name="username" id="username" #username="ngModel" class="form-control" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="password" class="control-label">password</label>
+        <input type="text" ngModel name="password" id="password" #password="ngModel" class="form-control" minlength="6" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="nm" class="control-label">name</label>
+        <input type="text" ngModel name="name" id="nm" #nm="ngModel" class="form-control" required>
+      </div>
+  
+      <div class="text-center">
+        <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+    </div>
+
+    <div class="row">
+        <modal #registerModal>
+          <modal-header>
+            <h1>Register Success</h1>
+          </modal-header>
+      
+          <modal-content class="row">
+            Thank you!
+          </modal-content>
+          <modal-footer>
+            <button class="btn btn-primary" (click)="registerModal.close()">close</button>
+          </modal-footer>
+        </modal>
+      </div>
+
+
+<!-- view 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="col-md-1 text-center"> </th>
+        <th class="col-md-1 text-center"> ID</th>
+        <th class="col-md-1 text-center"> Role ID</th>
+        <th class="col-md-1 text-center"> Username</th>
+        <th class="col-md-1 text-center"> Name</th>
+        <th class="col-md-1 text-center">Created On</th>
+        <th class="col-md-1 text-center">Status</th>
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users" class="text-center">
+        <td>
+          <button *ngIf="user.userStatus == 'active' && user.roleId == 2" type="button" class="btn btn-danger" (click)="disableCreator(user,disableCreatorModal)">Disable </button>
+          <button *ngIf="user.userStatus == 'active' && user.roleId == 3" type="button" class="btn btn-info" (click)="disableStartup(user,disableStartupModal)">Disable </button>
+          <button *ngIf="user.userStatus == 'disabled' && user.roleId == 2" type="button" class="btn btn-danger" (click)="enableCreator(user)">Enable </button>
+          <button *ngIf="user.userStatus == 'disabled' && user.roleId == 3" type="button" class="btn btn-info" (click)="enableStartup(user)">Enable </button>
+        </td>
+        <td>{{user.userId}}</td>
+        <td>{{user.roleId}}</td>
+        <td>{{user.username}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.createdOn}}</td>
+        <td>{{user.userStatus}}</td>
+
+        <td>
+          <button *ngIf="user.roleId == 2" type="button" class="btn btn-danger fa fa-minus" (click)="deleteCreator(user,deleteCreatorModal)"></button>
+          <button *ngIf="user.roleId == 3" type="button" class="btn btn-info fa fa-minus" (click)="deleteStartup(user,deleteStartupModal)"></button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br/>
+<br/>
+
+<!-- disable creator modal -->
+<div class="row">
+  <modal #disableCreatorModal>
+    <modal-header>
+      <h1>Disable User (Creator)</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <div *ngIf="modalError" class="row alert alert-danger">
+        Could not Disable
+      </div>
+      Are you sure ?
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onDisableCreator()">Yes</button>
+      <button class="btn btn-primary" (click)="disableCreatorModal.close()">cancel</button>
+    </modal-footer>
+  </modal>
+</div>
+<!-- disable startup modal -->
+<div class="row">
+  <modal #disableStartupModal>
+    <modal-header>
+      <h1>Disable User (Startup)</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <div *ngIf="modalError" class="row alert alert-danger">
+        Could not Disable
+      </div>
+      Are you sure ?
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onDisableStartup()">Yes</button>
+      <button class="btn btn-primary" (click)="disableStartupModal.close()">cancel</button>
+    </modal-footer>
+  </modal>
+</div>
+
+<!-- delete creator Modal -->
+<div class="row">
+  <modal #deleteCreatorModal>
+    <modal-header>
+      <h1>Delete Creator</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <div *ngIf="modalError" class="row alert alert-danger">
+        Could not Delete
+      </div>
+      Are you sure ?
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onDeleteCreator()">Delete</button>
+      <button class="btn btn-primary" (click)="deleteCreatorModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>
+
+<!-- delete startup Modal -->
+<div class="row">
+  <modal #deleteStartupModal>
+    <modal-header>
+      <h1>Delete Startup</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <div *ngIf="modalError" class="row alert alert-danger">
+        Could not Delete
+      </div>
+      Are you sure ?
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onDeleteStartup()">Delete</button>
+      <button class="btn btn-primary" (click)="deleteStartupModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>

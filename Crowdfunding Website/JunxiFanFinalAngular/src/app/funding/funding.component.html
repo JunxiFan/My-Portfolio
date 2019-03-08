@@ -1,0 +1,76 @@
+<div class="page-header">
+    <h1>Fundings (Admin)</h1>
+    <p>Idea ID: {{ideaIdString}}</p>
+  </div>
+  <br/>
+  
+  <div class="row">
+    
+    <span>
+      <button class="btn btn-success" (click)="refreshCate()">
+        <i class='fa fa-refresh'></i>
+      </button>
+    </span>
+  <!-- 搜索 -->
+    <!-- <span class="form-inline">
+      <span class="input-group add-on">
+        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text" [(ngModel)]="cate.cateDesc">
+        <div class="input-group-btn">
+          <button class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </span>
+    </span> -->
+  
+  
+  </div>
+
+    <!-- view 列表 -->
+    <div>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let track of results | async">
+            <img src="{{track.thumbnail}}">
+            <a target="_blank" href="{{track.link}}">{{ track.track }}
+            </a>
+          </li>
+        </ul>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+                
+              <th class="col-md-1 text-center"> Funding ID</th>
+              <th class="col-md-1 text-center"> value</th>
+              <th class="col-md-1 text-center"> Description</th>
+              <th class="col-md-1 text-center"> Amount</th>
+              <th class="col-md-1 text-center">Idea ID</th>
+             
+              <!-- <th class="col-md-* text-center">Action</th> -->
+      
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let funding of fundings" class="text-center">
+              <!-- <td> -->
+                <!-- <button *ngIf="fund.ideaStatus == 'new'" type="button" class="btn btn-danger" (click)="disableIdea(idea,disableModal)">Disable </button> -->
+                <!-- <button *ngIf="cate.cateStatus as 'disabled'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Enable </button> -->
+              <!-- </td> -->
+              <td>{{funding.fundId}}</td>
+              <td>{{funding.fundValue}}</td>
+              <td>{{funding.fundDesc}}</td>
+              <td>{{funding.fundAmount}}</td>
+              <td>{{funding.ideaId}}</td>
+              
+<!--               
+              <td>
+                <button type="button" class="btn btn-warning fa fa-edit" (click)="editCate(cate,editModal)"> </button>
+                <button type="button" class="btn btn-danger fa fa-minus" (click)="deleteCate(cate,deleteModal)"></button>
+                <button type="button" class="btn btn-success fa fa-eye" (click)="viewCateIdeas(cate)"></button> 
+                
+              </td> -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <br/>
+      <br/>

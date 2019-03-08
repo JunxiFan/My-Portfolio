@@ -1,0 +1,109 @@
+<nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-info ">
+  <div class="navbar-brand mr-5">SHOP</div>
+  <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavId">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+      <li class="nav-item active">
+        <a class="nav-link" [routerLink]="['/home']" routerLinkActive="router-link-active">
+          <span class="oi oi-home"></span> Home
+        </a>
+      </li>
+
+      <li *ngIf="isGuest()" class="nav-item active">
+        <a class="nav-link" [routerLink]="['/register']" routerLinkActive="router-link-active">Register</a>
+      </li>
+
+      <!-- login -->
+      <li *ngIf="isGuest()" class="nav-item ">
+        <div class="dropdown" id="loginDropDown">
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false" style="padding: 0rem 0.6rem;margin-top: .5rem;margin-bottom: .5rem">
+            <span class="oi oi-account-login"> </span> Login
+          </button>
+
+          <div class="dropdown-menu">
+
+            <form #loginForm="ngForm" class="px-4 py-3" id="loginDropDown">
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="username" class="form-control" [(ngModel)]="model.username"
+                  #username="ngModel" required>
+                <div *ngIf="(!loginForm.pristine && !loginForm.valid)">
+                  <div *ngIf="!username.valid && username.errors.required" class="alert alert-danger" style="padding: .5rem .5rem .5rem .5rem; margin-top: .1rem">
+                    username is required
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="password" class="form-control" [(ngModel)]="model.password"
+                  #password="ngModel" required>
+                <div *ngIf="(!loginForm.pristine && !loginForm.valid)">
+                  <div *ngIf="!password.valid && password.errors.required" class="alert alert-danger" style="padding: .5rem .5rem .5rem .5rem; margin-top: .1rem">
+                    password is required
+                  </div>
+                </div>
+              </div>
+
+              <button [disabled]="loginForm.invalid" id="loginBtn" type="submit" class="btn btn-primary" (click)="login(loginForm,replyModal)">
+                Sign in
+              </button>
+            </form>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" [routerLink]="['/register']" routerLinkActive="router-link-active">New around here? Sign up</a>
+            <!-- <a class="dropdown-item" href="#">Forgot password?</a> -->
+          </div>
+        </div>
+      </li>
+
+      <li *ngIf="isAdmin()" class="nav-item  active">
+        <a class="nav-link" [routerLink]="['adminhome/welcome']" routerLinkActive="router-link-active">
+          <span class="oi oi-dashboard"></span> DashBoard
+        </a>
+      </li>
+
+      <li *ngIf="isCustomer()" class="nav-item  active">
+        <a class="nav-link" [routerLink]="['/cart']" routerLinkActive="router-link-active">
+          <span class="oi oi-cart"></span> Cart
+          <!-- <span class="badge badge-light">9</span> -->
+        </a>
+      </li>
+      <li *ngIf="isCustomer()" class="nav-item  active">
+        <a class="nav-link" [routerLink]="['/orderHistory']" routerLinkActive="router-link-active">
+          <span class="oi oi-cart"></span> order History
+          <!-- <span class="badge badge-light">9</span> -->
+        </a>
+      </li>
+    </ul>
+    <div *ngIf="!isGuest()" class="nav-item text-light mr-5">
+      Hello, {{username}}!
+    </div>
+
+    <button *ngIf="!isGuest()" class="btn btn-outline-light mr-4" type="submit" (click)="logout()" [routerLink]="['/home']" routerLinkActive="router-link-active"
+      style="padding: 0rem 0.6rem">Log Out</button>
+
+    <form ngForm #searchForm="ngForm" class="form-inline my-2">
+      <input id="searchBrand" name="searchBrand" class="form-control mr-sm-2" type="search" placeholder="insert laptop's name"
+        aria-label="Search" ngModel #searchBrand="ngModel">
+      <button class="btn btn-outline-light my-2 my-sm-0" type="submit" (click)="searchLapByBrand(searchForm)">Search</button>
+    </form>
+
+  </div>
+</nav>
+
+<ng-template #replyModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{modalMessage}}
+  </div>
+</ng-template>

@@ -1,0 +1,23 @@
+<p>
+  We have recieved ${{webTotalAmount}}!
+</p>
+
+<!-- 查找金额-->
+<span class="form-inline">
+    <span class="input-group add-on">
+      <form ngForm #searchForm="ngForm" (ngSubmit)="getCategoryTotalAmount(searchForm)">
+        <input [(ngModel)]="cateIdForSearch" class="form-control" placeholder="enter cateId" name="srch-term" id="srch-term"
+          type="text">
+        <div class="input-group-btn">
+          <button [disabled]="searchForm.invalid" class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </form>
+    </span>
+  </span>
+
+  <p>
+      Total Amount in this category: {{cateTotalAmount}}
+        
+      </p>

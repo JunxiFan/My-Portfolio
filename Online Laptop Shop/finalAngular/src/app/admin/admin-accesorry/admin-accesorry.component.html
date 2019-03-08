@@ -1,0 +1,189 @@
+<h1 class="m-4">Accessories</h1>
+<button type="button" class="btn btn-outline-primary m-3" (click)="openModal(addModal)">
+  <span class="oi oi-plus"></span> Add new one
+</button>
+
+<table class="table table-striped m-2">
+  <thead class="thead-primary">
+    <tr>
+      <th scope="col">#</th>
+      <!-- <th scope="col">_id</th> -->
+      <th scope="col">Name</th>
+      <th scope="col">Type</th>
+      <th scope="col">Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let acc of accs; index as i">
+      <th scope="row">{{i+1}}</th>
+      <!-- <td>{{acc._id}}</td> -->
+      <td>{{acc.accName}}</td>
+      <td>{{acc.accType}}</td>
+      <!-- <td>{{acc.accDesc}}</td> -->
+      <td>
+        <button type="button" class="btn-table btn btn-info" (click)="viewAcc(acc, viewModal)">
+          <span class="table-icon oi oi-menu"></span>
+        </button>
+        <button type="button" class="btn-table btn btn-success" (click)="editAcc(acc, editModal)">
+          <span class="table-icon oi oi-pencil"></span>
+        </button>
+        <button type="button" class="btn-table btn btn-danger" (click)="delAcc(acc, delModal)">
+          <span class="table-icon oi oi-minus"></span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- add a new accessory modal -->
+<ng-template #addModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add an Accesory</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form ngForm #addForm="ngForm">
+
+      <div class="form-group">
+        <label class="control-label" for="accName">Name</label>
+        <input type="text" id="accName" name="accName" class="form-control" ngModel #accName="ngModel" required />
+
+        <div *ngIf="accName.invalid && (accName.dirty || accName.touched)">
+          <div *ngIf="accName.errors.required" class="alert alert-danger">
+            name is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accType">Type</label>
+        <br>
+        <select class="custom-select " id="accType" name="accType" ngModel required>
+
+          <option value="CPU">CPU</option>
+          <option value="Graphics card">Graphics card</option>
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accDesc">Description</label>
+        <input type="text" id="accDesc" name="accDesc" class="form-control" ngModel #accDesc="ngModel" required />
+
+        <div *ngIf="accDesc.invalid && (accDesc.dirty || accDesc.touched)">
+          <div *ngIf="accDesc.errors.required" class="alert alert-danger">
+            Description is required
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" [disabled]="addForm.invalid" (click)="onAddAcc(addForm)">Done</button>
+    <!-- <button class="btn btn-secondary" (click)="addModal.close()">close</button> -->
+  </div>
+</ng-template>
+
+<!-- edit an accessory modal -->
+<ng-template #editModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit the Accesory</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form ngForm #editForm="ngForm">
+
+      <div class="form-group">
+        <label class="control-label" for="accName">Name</label>
+        <input type="text" id="accName" name="accName" class="form-control" [(ngModel)]="acc.accName" #accName="ngModel" required
+        />
+
+        <div *ngIf="accName.invalid && (accName.dirty || accName.touched)">
+          <div *ngIf="accName.errors.required" class="alert alert-danger">
+            name is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accType">Type</label>
+        <br>
+        <select class="custom-select " id="accType" name="accType" [(ngModel)]="acc.accType" required>
+
+          <option value="CPU" selected>CPU</option>
+          <option value="Graphics card">Graphics card</option>
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accDesc">Description</label>
+        <input type="text" id="accDesc" name="accDesc" class="form-control" [(ngModel)]="acc.accDesc" #accDesc="ngModel" required
+        />
+
+        <div *ngIf="accDesc.invalid && (accDesc.dirty || accDesc.touched)">
+          <div *ngIf="accDesc.errors.required" class="alert alert-danger">
+            Description is required
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" [disabled]="editForm.invalid" (click)="onEditAcc(editForm)">Done</button>
+    <!-- <button class="btn btn-secondary" (click)="addModal.close()">close</button> -->
+  </div>
+</ng-template>
+
+<!-- view an accessory modal -->
+<ng-template #viewModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">View Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form ngForm #viewForm="ngForm">
+
+      <div class="form-group">
+        <label class="control-label" for="accName">ID</label>
+        <input disabled type="text" class="form-control" value="{{acc._id}}" />
+
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accName">Name</label>
+        <input disabled type="text" class="form-control" value="{{acc.accName}}" />
+
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accType">Type</label>
+        <input disabled type="text" value="{{acc.accType}}" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="accDesc">Description</label>
+        <input disabled type="text" value="{{acc.accDesc}}" class="form-control">
+
+      </div>
+
+    </form>
+  </div>
+
+</ng-template>
+
+<!-- del modal -->
+<ng-template #delModal>
+  <div class="modal-body text-center">
+    <p>Do you want to Delete this Accessory?</p>
+    <button type="button" class="btn btn-default" (click)="onDelAcc()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="modal.hide()">No</button>
+  </div>
+</ng-template>

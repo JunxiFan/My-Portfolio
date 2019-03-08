@@ -1,0 +1,272 @@
+<h1 class="m-4">Laptops</h1>
+<div class="row">
+
+  <button type="button" class="btn btn-success  my-2 ml-3" title="Refresh Table" (click)="refresh()">
+    <span class="oi oi-loop-circular"></span>
+  </button>
+
+  <button type="button" class="btn btn-outline-primary mx-1 my-2" (click)="openModal(addModal)">
+    <span class="oi oi-plus"></span> Add new one
+  </button>
+
+  <form ngForm #searchForm="ngForm" class="form-inline">
+    <input id="searchBrand" name="searchBrand" class="form-control mr-sm-2" type="search" placeholder="Search By Brand" aria-label="Search"
+      ngModel #searchBrand="ngModel">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" (click)="searchLapByBrand(searchForm)">Search</button>
+  </form>
+
+</div>
+
+
+<table class="table table-striped m-2">
+  <thead class="thead-primary">
+    <tr>
+      <th scope="col">#</th>
+      <!-- <th scope="col">_id</th> -->
+      <th scope="col">Name</th>
+      <th scope="col">Brand</th>
+      <th scope="col">Operation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let laptop of laptops; index as i">
+      <th scope="row">{{i+1}}</th>
+      <td>{{laptop.lapName}}</td>
+      <td>{{laptop.lapBrand}}</td>
+      <td>
+        <button type="button" class="btn-table btn btn-info" (click)="viewLap(laptop, viewModal)">
+          <span class="table-icon oi oi-menu"></span>
+        </button>
+        <button type="button" class="btn-table btn btn-success" (click)="editLap(laptop, editModal)">
+          <span class="table-icon oi oi-pencil"></span>
+        </button>
+        <button type="button" class="btn-table btn btn-danger" (click)="delLap(laptop, delModal)">
+          <span class="table-icon oi oi-minus"></span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- add a new laptop modal -->
+<ng-template #addModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add an Laptop</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form ngForm #addForm="ngForm">
+
+      <div class="form-group">
+        <label class="control-label" for="lapName">Name</label>
+        <input type="text" id="lapName" name="lapName" class="form-control" ngModel #lapName="ngModel" required />
+
+        <div *ngIf="lapName.invalid && (lapName.dirty || lapName.touched)">
+          <div *ngIf="lapName.errors.required" class="alert alert-danger">
+            name is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapBrand">Brand</label>
+        <input type="text" id="lapBrand" name="lapBrand" class="form-control" ngModel #lapBrand="ngModel" required />
+
+        <div *ngIf="lapBrand.invalid && (lapBrand.dirty || lapBrand.touched)">
+          <div *ngIf="lapBrand.errors.required" class="alert alert-danger">
+            Brand is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapCPU">Cpu</label>
+        <br>
+        <select class="custom-select" style="width: 100%" id="lapCPU" name="lapCPU" ngModel required>
+          <option *ngFor="let acc of cpus" value="{{acc.accName}}">{{acc.accName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapGraph">Graphic Card</label>
+        <br>
+        <select class="custom-select" style="width: 100%" id="lapGraph" name="lapGraph" ngModel required>
+          <option *ngFor="let acc of graphs" value="{{acc.accName}}">{{acc.accName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label" for="lapPrice">Price</label>
+          <input type="number" id="lapPrice" name="lapPrice" class="form-control" ngModel #lapPrice="ngModel" required />
+  
+          <div *ngIf="lapPrice.invalid && (lapPrice.dirty || lapPrice.touched)">
+            <div *ngIf="lapPrice.errors.required" class="alert alert-danger">
+              Price is required
+            </div>
+          </div>
+        </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapDesc">Description</label>
+        <input type="text" id="lapDesc" name="lapDesc" class="form-control" ngModel #lapDesc="ngModel" required />
+
+        <div *ngIf="lapDesc.invalid && (lapDesc.dirty || lapDesc.touched)">
+          <div *ngIf="lapDesc.errors.required" class="alert alert-danger">
+            Description is required
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" [disabled]="addForm.invalid" (click)="onAddLap(addForm)">Done</button>
+    <!-- <button class="btn btn-secondary" (click)="addModal.close()">close</button> -->
+  </div>
+</ng-template>
+
+<!-- edit an laptop modal -->
+<ng-template #editModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edit the Laptop</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form ngForm #editForm="ngForm">
+
+      <div class="form-group">
+        <label class="control-label" for="lapName">Name</label>
+        <input type="text" id="lapName" name="lapName" class="form-control" [(ngModel)]="laptop.lapName" #lapName="ngModel" required
+        />
+
+        <div *ngIf="lapName.invalid && (lapName.dirty || lapName.touched)">
+          <div *ngIf="lapName.errors.required" class="alert alert-danger">
+            name is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapBrand">Brand</label>
+        <input type="text" id="lapBrand" name="lapBrand" class="form-control" [(ngModel)]="laptop.lapBrand" #lapBrand="ngModel" required
+        />
+
+        <div *ngIf="lapBrand.invalid && (lapBrand.dirty || lapBrand.touched)">
+          <div *ngIf="lapBrand.errors.required" class="alert alert-danger">
+            Brand is required
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapCPU">Cpu</label>
+        <br>
+        <select class="custom-select " id="lapCPU" name="lapCPU" [(ngModel)]="laptop.lapCPU" required>
+          <option *ngFor="let acc of cpus" value="{{acc.accName}}">{{acc.accName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapGraph">Graphic Card</label>
+        <br>
+        <select class="custom-select " id="lapGraph" name="lapGraph" [(ngModel)]="laptop.lapGraph" required>
+          <option *ngFor="let acc of graphs" value="{{acc.accName}}">{{acc.accName}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+          <label class="control-label" for="lapPrice">Price</label>
+          <input type="number" id="lapPrice" name="lapPrice" class="form-control" [(ngModel)]="laptop.lapPrice" #lapPrice="ngModel" required />
+  
+          <div *ngIf="lapPrice.invalid && (lapPrice.dirty || lapPrice.touched)">
+            <div *ngIf="lapPrice.errors.required" class="alert alert-danger">
+              Price is required
+            </div>
+          </div>
+        </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapDesc">Description</label>
+        <input type="text" id="lapDesc" name="lapDesc" class="form-control" [(ngModel)]="laptop.lapDesc" #lapDesc="ngModel" required
+        />
+
+        <div *ngIf="lapDesc.invalid && (lapDesc.dirty || lapDesc.touched)">
+          <div *ngIf="lapDesc.errors.required" class="alert alert-danger">
+            Description is required
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" [disabled]="editForm.invalid" (click)="onEditLap(editForm)">Done</button>
+    <!-- <button class="btn btn-secondary" (click)="addModal.close()">close</button> -->
+  </div>
+</ng-template>
+
+<!-- view an accessory modal -->
+<ng-template #viewModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">View Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form ngForm #viewForm="ngForm">
+
+      <div class="form-group">
+        <label class="control-label" for="lapName">ID</label>
+        <input disabled type="text" class="form-control" value="{{laptop._id}}" />
+
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapName">Name</label>
+        <input disabled type="text" class="form-control" value="{{laptop.lapName}}" />
+
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapBrand">Brand</label>
+        <input disabled type="text" value="{{laptop.lapBrand}}" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapCPU">CPU</label>
+        <input disabled type="text" value="{{laptop.lapCPU}}" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapGraph">Graphic Card</label>
+        <input disabled type="text" value="{{laptop.lapGraph}}" class="form-control">
+      </div>
+
+      <div class="form-group">
+          <label class="control-label" for="lapGraph">Price</label>
+          <input disabled type="text" value="{{laptop.lapPrice}}" class="form-control">
+        </div>
+
+      <div class="form-group">
+        <label class="control-label" for="lapDesc">Description</label>
+        <input disabled type="text" value="{{laptop.lapDesc}}" class="form-control">
+
+      </div>
+
+    </form>
+  </div>
+
+</ng-template>
+
+<!-- del modal -->
+<ng-template #delModal>
+  <div class="modal-body text-center">
+    <p>Do you want to delete this laptop?</p>
+    <button type="button" class="btn btn-default" (click)="onDelLap()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="modal.hide()">No</button>
+  </div>
+</ng-template>

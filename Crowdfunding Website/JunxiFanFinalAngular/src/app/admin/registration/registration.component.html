@@ -1,0 +1,144 @@
+<div class="page-header">
+  <h1>Registration</h1>
+</div>
+<br/>
+
+<div class="row">
+  <button type="button" style="font-size:1em;" class="btn btn-success btn-circle" [ngClass]="{'active ':addEnabled,'disabled':!addEnabled}"
+    (click)="toggleAdd()">
+    register as a startup
+  </button>
+</div>
+
+
+<!-- 新建User -->
+<div *ngIf="addEnabled">
+  <div class="page-header">
+    <h3>Add User</h3>
+  </div>
+  <div *ngIf="(!userForm.pristine && !userForm.valid)" class="row alert alert-danger">
+    <div *ngIf="(roleId.touched || roleId.dirty )&& !roleId.valid">
+      <div *ngIf="roleId.errors.required">Role ID is required</div>
+      <div *ngIf="roleId.errors.minlength">RoleId Maxmum is {{roleId.errors.maxlength.requiredLength}}</div>
+      <div *ngIf="roleId.errors.pattern">RoleId: Only Number 2, 4</div>
+    </div>
+
+    <div *ngIf="(username.touched || username.dirty )&& !username.valid">
+      <div *ngIf="username.errors.required">username is required</div>
+    </div>
+
+    <div *ngIf="(password.touched || password.dirty )&& !password.valid">
+      <div *ngIf="password.errors.required">password is required</div>
+      <div *ngIf="password.errors.minlength">password Minmum is {{password.errors.minlength.requiredLength}}</div>
+    </div>
+
+    <div *ngIf="(nm.touched || nm.dirty )&& !nm.valid">
+      <div *ngIf="nm.errors.required">name is required</div>
+    </div>
+  </div>
+  <form ngForm #userForm="ngForm" (ngSubmit)="userRegister(userForm,registerModal)">
+    <div class="form-group">
+      <label class="control-label" for="roleId">RoleId</label>
+      <input type="text" id="roleId" ngModel name="roleId" pattern="[2,4]*" #roleId="ngModel" class="form-control" maxlength="1"
+        required/>
+    </div>
+
+    <div class="form-group">
+      <label for="username" class="control-label">username</label>
+      <input type="text" ngModel name="username" id="username" #username="ngModel" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="control-label">password</label>
+      <input type="text" ngModel name="password" id="password" #password="ngModel" class="form-control" minlength="6" required>
+    </div>
+
+    <div class="form-group">
+      <label for="nm" class="control-label">name</label>
+      <input type="text" ngModel name="name" id="nm" #nm="ngModel" class="form-control" required>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+<!-- 新建Startup -->
+<div *ngIf="!addEnabled">
+  <div class="page-header">
+    <h3>Add Startup</h3>
+  </div>
+  <div *ngIf="(!suForm.pristine && !suForm.valid)" class="row alert alert-danger">
+
+    <div *ngIf="(cateId.touched || cateId.dirty )&& !cateId.valid">
+      <div *ngIf="cateId.errors.required">Cate ID is required</div>
+      <div *ngIf="cateId.errors.pattern">CateId: Only Characters</div>
+    </div>
+
+    <div *ngIf="(suUsername.touched || suUsername.dirty )&& !suUsername.valid">
+      <div *ngIf="suUsername.errors.required">username is required</div>
+    </div>
+
+    <div *ngIf="(suPassword.touched || suPassword.dirty )&& !suPassword.valid">
+      <div *ngIf="suPassword.errors.required">password is required</div>
+      <div *ngIf="suPassword.errors.minlength">Password Minmum is {{suPassword.errors.minlength.requiredLength}}</div>
+    </div>
+
+    <div *ngIf="(suNm.touched || suNm.dirty )&& !suNm.valid">
+      <div *ngIf="suNm.errors.required">name is required</div>
+    </div>
+
+    <div *ngIf="(compName.touched || compName.dirty )&& !compName.valid">
+      <div *ngIf="compName.errors.required">Company name is required</div>
+    </div>
+  </div>
+  <form ngForm #suForm="ngForm" (ngSubmit)="suRegister(suForm,registerModal)">
+
+    <div class="form-group">
+      <label for="cateId" class="control-label">Cate ID</label>
+      <input type="text" ngModel name="cateId" id="cateId" pattern="[0-9]*" #cateId="ngModel" class="form-control" minlength="1"
+        required>
+    </div>
+
+    <div class="form-group">
+      <label for="suUsername" class="control-label">username</label>
+      <input type="text" ngModel name="username" id="suUsername" #suUsername="ngModel" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="suPassword" class="control-label">password</label>
+      <input type="text" ngModel name="password" id="suPassword" #suPassword="ngModel" class="form-control" minlength="6" required>
+    </div>
+
+    <div class="form-group">
+      <label for="suNm" class="control-label">name</label>
+      <input type="text" ngModel name="name" id="suNm" #suNm="ngModel" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="compName" class="control-label">Company Name</label>
+      <input type="text" ngModel name="compName" id="compName" #compName="ngModel" class="form-control" required>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" [disabled]="suForm.invalid" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+
+<div class="row">
+  <modal #registerModal>
+    <modal-header>
+      <h1>Register Success</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      Thank you!
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="registerModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>

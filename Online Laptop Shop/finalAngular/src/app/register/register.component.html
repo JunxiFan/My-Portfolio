@@ -1,0 +1,125 @@
+<div class="jumbotron">
+  <h1 class="display-4">Sign Up</h1>
+  <!-- <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p> -->
+
+  <div>
+    <form [formGroup]="registerForm" action="#" class="mx-auto py-5">
+      <div class="form-group col-lg-4 mx-auto">
+
+        UserName:
+        <input formControlName="username" type="text" class="form-control" name="username" #username>
+        <div [hidden]="registerForm.get('username').valid || registerForm.get('username').untouched" class="py-2 m-1 alert alert-danger">
+          <div [hidden]="!registerForm.hasError('required','username')">Username is required.</div>
+        </div>
+
+      </div>
+      <div class="form-group col-lg-4 mx-auto">
+
+        Password:
+        <input formControlName="password" (keyup)="onKey(password.value)" type="password" class="form-control" name="password" #password>
+        <div [hidden]="registerForm.get('password').valid || registerForm.get('password').untouched" class="py-2 m-1 alert alert-danger">
+          <div [hidden]="!registerForm.hasError('required','password')">Password is required.</div>
+        </div>
+
+        <div *ngIf="passwordIndicator>0" class="pt-2">
+          <span *ngIf="passwordIndicator==1" class="fa fa-circle p-0 m-0" style="font-size: 20px; color: red;"></span>
+          <span *ngIf="passwordIndicator==2" class="fa fa-circle  p-0 m-0" style="font-size: 20px; color: yellow;"></span>
+          <span *ngIf="passwordIndicator==3" class="fa fa-circle p-0 m-0" style="font-size: 20px; color: green;"></span>
+
+          <span *ngIf="passwordIndicator==1" class="fa fa-circle p-0 m-0" style="font-size: 20px; border-color: black; color: white"></span>
+          <span *ngIf="passwordIndicator==2" class="fa fa-circle p-0 m-0" style="font-size: 20px;  color: yellow"></span>
+          <span *ngIf="passwordIndicator==3" class="fa fa-circle p-0 m-0" style="font-size: 20px;  color: green"></span>
+
+          <span *ngIf="passwordIndicator<=2" class="fa fa-circle p-0 m-0" style="font-size: 20px; border-color: black; color: white"></span>
+          <span *ngIf="passwordIndicator==3" class="fa fa-circle p-0 m-0" style="font-size: 20px; color: green;"></span>
+          <span *ngIf="passwordIndicator==1" class="p-0">
+            <p style="color: red">weak</p>
+          </span>
+          <span *ngIf="passwordIndicator==2" class="p-0 m-0">
+            <p style="color: yellow">medium</p>
+          </span>
+          <span *ngIf="passwordIndicator==3" class="p-0 m-0">
+            <p style="color: green">strong</p>
+          </span>
+        </div>
+      </div>
+
+
+      <div class="form-group col-lg-4 mx-auto">
+
+        Verify Password:
+        <input (keyup)="onCompare(password.value,password2.value)" formControlName="password2" type="password" class="form-control"
+          name="password2" #password2>
+        <span *ngIf="passwordCompare">
+          <h6 style="color: red">Password not Identical</h6>
+        </span>
+      </div>
+      
+    </form>
+  </div>
+
+  <hr class="my-4">
+  <div class="col-sm-1 mx-auto">
+    <input [disabled]="!registerForm.valid||passwordCompare" type="submit" class="btn btn-info" value="Sign Up" (click)="onClickSubmit(replyModal, registerForm)">
+  </div>
+
+</div>
+
+<ng-template #replyModal>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">{{title}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      {{message}}
+    </div>
+  </ng-template>
+
+
+
+
+
+<!-- 
+<form #RegisterForm="ngForm" class="mx-auto py-5" id="loginDropDown">
+  <div class="form-group col-lg-4 mx-auto">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" placeholder="username" class="form-control" [(ngModel)]="model.username"
+      #username="ngModel" required>
+    <div *ngIf="(!RegisterForm.pristine && !RegisterForm.valid)">
+      <div *ngIf="!username.valid && username.errors.required" class="alert alert-danger" style="padding: .5rem .5rem .5rem .5rem; margin-top: .1rem">
+        username is required
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group col-lg-4 mx-auto">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="password" class="form-control" [(ngModel)]="model.password"
+      #password="ngModel" required>
+    <div *ngIf="(!RegisterForm.pristine && !RegisterForm.valid)">
+      <div *ngIf="!password.valid && password.errors.required" class="alert alert-danger" style="padding: .5rem .5rem .5rem .5rem; margin-top: .1rem">
+        password is required
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group col-lg-4 mx-auto">
+    <label for="password2"> Verify Password</label>
+    <input type="password" id="password2" name="password2" placeholder="password" class="form-control" [(ngModel)]="model.password2"
+      #password2="ngModel" required>
+    <div *ngIf="(!RegisterForm.pristine && !RegisterForm.valid)">
+      <div *ngIf="!password2.valid && password2.errors.required" class="alert alert-danger" style="padding: .5rem .5rem .5rem .5rem; margin-top: .1rem">
+        password is required
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-1 mx-auto">
+
+  <button [disabled]="RegisterForm.invalid" id="loginBtn" type="submit" class="btn btn-info" (click)="login(RegisterForm)">
+    Sign Up
+  </button>
+</div>
+</form> -->

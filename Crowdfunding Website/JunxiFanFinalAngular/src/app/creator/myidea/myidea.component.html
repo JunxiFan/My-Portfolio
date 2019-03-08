@@ -1,0 +1,161 @@
+<div class="page-header">
+  <h1>My Idea</h1>
+</div>
+<br/>
+<!-- *ngIf="!isCreator" -->
+<!-- search New Idea by CateId -->
+
+<div class="row">
+  <span>
+    <button class="btn btn-success" (click)="refresh()">
+      <i class='fa fa-refresh'></i>
+    </button>
+  </span>
+  <span>
+      <button class="btn btn-info" (click)="getDyingIdea()">
+        Idea end in 3 days
+      </button>
+    </span>
+</div>
+
+<!-- view Idea 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="col-md-1 text-center"> Idea ID</th>
+        <th class="col-md-1 text-center"> category ID</th>
+        <th class="col-md-1 text-center"> Creator ID</th>
+        <th class="col-md-1 text-center"> Status</th>
+        <th class="col-md-1 text-center">Create Date</th>
+        <th class="col-md-1 text-center">Name</th>
+        <th class="col-md-3 text-center">Desc</th>
+        <th class="col-md-1 text-center">End Date</th>
+        <th class="col-md-1 text-center">Aim Amount</th>
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let idea of ideas" class="text-center">
+        <td>{{idea.ideaId}}</td>
+        <td>{{idea.cateId}}</td>
+        <td>{{idea.userId}}</td>
+        <td>{{idea.ideaStatus}}</td>
+        <td>{{idea.createdOn}}</td>
+        <td>{{idea.ideaName}}</td>
+        <td>{{idea.ideaDesc}}</td>
+        <td>{{idea.ideaEnddate}}</td>
+        <td>{{idea.ideaAim}}</td>
+
+        <td>
+          <button *ngIf="isCreator()" type="button" class="btn btn-success fa fa-eye" (click)="creatorViewIdeaFunding(idea)">View Fundings</button>
+
+          <button *ngIf="isCreator()" type="button" class="btn btn-info fa fa-book" (click)="createFunding(idea, createFundingModal)">Create Funding</button>          
+
+          <button *ngIf="isCreator()" type="button" class="btn btn-success fa fa-eye" (click)="creatorViewIdeaService(idea)">View Services</button>
+
+          <button *ngIf="isCreator()" type="button" class="btn btn-info fa fa-book" (click)="createService(idea, createServModal)">Create Service</button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- <create service> -->
+<div class="row">
+  <modal #createServModal>
+    <modal-header>
+      <h1>Create Service</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <form ngForm #MyEditForm="ngForm">
+
+        <div class="form-group">
+          <label class="control-label" for="servDdl">Service DDL</label>
+          <input type="date" id="servDdl" [(ngModel)]="service.servDdl" #servDdl="ngModel" pattern="^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$"
+            name="servDdl" class="form-control" required/>
+
+          <div *ngIf="(!MyEditForm.pristine && !MyEditForm.valid)">
+            <div *ngIf="!servDdl.valid && servDdl.errors.required">DDL is required</div>
+            <div *ngIf="!servDdl.valid && servDdl.errors.pattern">Please enter a correct Date</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label" for="reward">Reward</label>
+          <input type="text" id="reward" [(ngModel)]="service.reward" #reward="ngModel" pattern="[0-9]*" name="reward" class="form-control"
+            required/>
+          <div *ngIf="(!MyEditForm.pristine && !MyEditForm.valid)">
+            <div *ngIf="!reward.valid && reward.errors.required">reward is required</div>
+            <div *ngIf="!reward.valid && reward.errors.pattern">Please enter a correct number</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="servDesc" class="control-label">Service Description</label>
+          <input type="text" id="servDesc" [(ngModel)]="service.servDesc" name="servDesc" class="form-control">
+        </div>
+
+      </form>
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" [disabled]="MyEditForm.invalid" (click)="onCreateService(MyEditForm);createServModal.close()">Add</button>
+      <button class="btn btn-primary" (click)="createServModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>
+
+<!-- <create Funding> -->
+    <div class="row">
+        <modal #createFundingModal>
+          <modal-header>
+            <h1>Create Funding</h1>
+          </modal-header>
+      
+          <modal-content class="row">
+            <form ngForm #CreateFundingForm="ngForm">
+      
+              <div class="form-group">
+                <label class="control-label" for="fundValue">Price</label>
+                <input type="text" id="fundValue" [(ngModel)]="funding.fundValue" #fundValue="ngModel" pattern="[0-9]*"
+                  name="fundValue" class="form-control" required/>
+      
+                  <div *ngIf="(!CreateFundingForm.pristine && !CreateFundingForm.valid)">
+                      <div *ngIf="!fundValue.valid && fundValue.errors.required">Price is required</div>
+                      <div *ngIf="!fundValue.valid && fundValue.errors.pattern">Please enter a correct number</div>
+                    </div>
+              </div>
+      
+              <div class="form-group">
+                <label class="control-label" for="fundAmount">Fund Amount</label>
+                <input type="text" id="fundAmount" [(ngModel)]="funding.fundAmount" #fundAmount="ngModel" pattern="[0-9]*" name="fundAmount" class="form-control"
+                  required/>
+                <div *ngIf="(!CreateFundingForm.pristine && !CreateFundingForm.valid)">
+                  <div *ngIf="!fundAmount.valid && fundAmount.errors.required">Fund Amount is required</div>
+                  <div *ngIf="!fundAmount.valid && fundAmount.errors.pattern">Please enter a correct number</div>
+                </div>
+              </div>
+      
+              <div class="form-group">
+                <label for="fundDesc" class="control-label">Description</label>
+                <input type="text" id="fundDesc" [(ngModel)]="funding.fundDesc" name="fundDesc" class="form-control">
+              </div>
+      
+            </form>
+          </modal-content>
+          <modal-footer>
+            <button class="btn btn-primary" [disabled]="CreateFundingForm.invalid" (click)="onCreateFunding(CreateFundingForm);createFundingModal.close()">Add</button>
+            <button class="btn btn-primary" (click)="createFundingModal.close()">close</button>
+          </modal-footer>
+        </modal>
+      </div>

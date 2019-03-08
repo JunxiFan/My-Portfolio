@@ -1,0 +1,184 @@
+<div class="page-header">
+  <h1>Category Details</h1>
+</div>
+<br/>
+
+<div class="row">
+  <!-- 添加按钮 -->
+  <span>
+    <button type="button" style="font-size:1em;" class="btn btn-success btn-circle" [ngClass]="{'active ':!addEnabled,'disabled':addEnabled}"
+      (click)="toggleAdd()">
+      <i class='fa fa-plus'></i>
+    </button>
+  </span>
+  <!-- 刷新按钮 -->
+  <span>
+    <button class="btn btn-success" (click)="refreshCate()">
+      <i class='fa fa-refresh'></i>
+    </button>
+  </span>
+  <!-- 搜索 -->
+  <!-- <span class="form-inline">
+      <span class="input-group add-on">
+        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text" [(ngModel)]="cate.cateDesc">
+        <div class="input-group-btn">
+          <button class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </span>
+    </span> -->
+
+
+</div>
+
+<!-- 新建功能 -->
+<div *ngIf="addEnabled">
+  <div class="page-header">
+    <h3>Add Category</h3>
+  </div>
+  <div *ngIf="(!myForm.pristine && !myForm.valid)" class="row alert alert-danger">
+    <div *ngIf="(cateName.touched || cateName.dirty )&& !cateName.valid">
+      <div *ngIf="cateName.errors.required">cate Name is required</div>
+      <div *ngIf="cateName.errors.minlength">Minmum is {{cateName.errors.minlength.requiredLength}}</div>
+      <!-- <div *ngIf="cateName.errors.pattern">Only Characters</div> -->
+    </div>
+  </div>
+  <form ngForm #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+    <div class="form-group">
+      <label class="control-label" for="cateName">cateName</label>
+      <input type="text" id="cateName" ngModel name="cateName" #cateName="ngModel" class="form-control" minlength="1" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="cateDesc" class="control-label">cateDesc</label>
+      <input type="text" ngModel name="cateDesc" id="cateDesc" #cateDesc="ngModel" class="form-control">
+    </div>
+    <div class="text-center">
+      <button type="submit" [disabled]="myForm.invalid" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+<!-- view 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th class="col-md-1 text-center"> </th>
+        <th class="col-md-1 text-center"> Category ID</th>
+        <th class="col-md-1 text-center"> Name</th>
+        <th class="col-md-1 text-center"> Desc</th>
+        <th class="col-md-1 text-center"> Status</th>
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cate of cates" class="text-center">
+        <td>
+          <button *ngIf="cate.cateStatus == 'normal'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Disable </button>
+          <!-- <button *ngIf="cate.cateStatus as 'disabled'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Enable </button> -->
+        </td>
+        <td>{{cate.cateId}}</td>
+        <td>{{cate.cateName}}</td>
+        <td>{{cate.cateDesc}}</td>
+        <td>{{cate.cateStatus}}</td>
+        <td>
+          <button type="button" class="btn btn-warning fa fa-edit" (click)="editCate(cate,editModal)"> </button>
+          <button type="button" class="btn btn-danger fa fa-minus" (click)="deleteCate(cate,deleteModal)"></button>
+          <button type="button" class="btn btn-success fa fa-eye" (click)="viewCateIdeas(cate)"></button>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br/>
+<br/>
+
+<div class="row">
+  <modal #editModal>
+    <modal-header>
+      <h1>Edit Category</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <form ngForm #MyEditForm="ngForm">
+
+        <div class="form-group">
+          <label class="control-label" for="cateId">Cate Id</label>
+          <input type="text" id="cateId" [(ngModel)]="cate.cateId" name="editCateId" disabled class="form-control" />
+
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="cateName">RoleName</label>
+          <input type="text" id="cateName" [(ngModel)]="cate.cateName" name="editCateName" #editCateName="ngModel" class="form-control"
+            minlength="4" required/>
+          <div *ngIf="(!MyEditForm.pristine && !MyEditForm.valid)">
+            <div *ngIf="!editCateName.valid && editCateName.errors.required">Category Name is required</div>
+            <div *ngIf="!editCateName.valid && editCateName.errors.minlength">Minmum is {{editCateName.errors.minlength.requiredLength}}</div>
+            <div *ngIf="!editCateName.valid && editCateName.errors.pattern">Only Characters</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cateDesc" class="control-label">RoleDesc</label>
+          <input type="text" id="cateDesc" [(ngModel)]="cate.cateDesc" name="editCateDesc" #editCateDesc="ngModel" class="form-control">
+        </div>
+
+      </form>
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" [disabled]="MyEditForm.invalid" (click)="onEdit();editModal.close()">Save</button>
+      <button class="btn btn-primary" (click)="editModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>
+
+
+<div class="row">
+  <modal #deleteModal>
+    <modal-header>
+      <h1>Delete Category</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <div *ngIf="modalError" class="row alert alert-danger">
+        Could not Delete
+      </div>
+      Are you sure ?
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onDelete()">Delete</button>
+      <button class="btn btn-primary" (click)="deleteModal.close()">close</button>
+    </modal-footer>
+  </modal>
+</div>
+
+<!-- disable modal -->
+<div class="row">
+  <modal #disableModal>
+    <modal-header>
+      <h1>Disable Category</h1>
+    </modal-header>
+
+    <modal-content class="row">
+      <div *ngIf="modalError" class="row alert alert-danger">
+        Could not Disable
+      </div>
+      Are you sure ?
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="onDisable()">Yes</button>
+      <button class="btn btn-primary" (click)="disableModal.close()">cancel</button>
+    </modal-footer>
+  </modal>
+</div>

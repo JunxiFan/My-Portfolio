@@ -1,0 +1,162 @@
+<div class="page-header">
+  <h1>Cart</h1>
+</div>
+<br/>
+
+<div class="row">
+
+  <span>
+    <button class="btn btn-success" (click)="refresh()">
+      <i class='fa fa-refresh'></i>
+    </button>
+  </span>
+
+  <span>
+    <button type="button" style="font-size:1em;" class="btn btn-success btn-circle" [ngClass]="{'active ':!addEnabled,'disabled':addEnabled}"
+      (click)="toggleAdd()">
+      <i class='fa fa-plus'></i> Credit Card
+    </button>
+  </span>
+  <!-- 搜索 -->
+  <!-- <span class="form-inline">
+      <span class="input-group add-on">
+        <input class="form-control" placeholder="Search" name="srch-term" id="srch-term" type="text" [(ngModel)]="cate.cateDesc">
+        <div class="input-group-btn">
+          <button class="btn btn-success" type="submit">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </span>
+    </span> -->
+</div>
+
+<!-- 新建功能 -->
+<div *ngIf="addEnabled">
+  <div class="page-header">
+    <h3>Add Credit Card</h3>
+  </div>
+  <div *ngIf="(!myForm.pristine && !myForm.valid)" class="row alert alert-danger">
+    <div *ngIf="(cardNum.touched || cardNum.dirty )&& !cardNum.valid">
+      <div *ngIf="cardNum.errors.required">Card Number is required</div>
+    </div>
+    <div *ngIf="(expirMonth.touched || expirMonth.dirty )&& !expirMonth.valid">
+      <div *ngIf="expirMonth.errors.required">Expir Month is required</div>
+      <div *ngIf="expirMonth.errors.maxlength">Please Enter a correct Month</div>
+
+    </div>
+    <div *ngIf="(expirYear.touched || expirYear.dirty )&& !expirYear.valid">
+      <div *ngIf="expirYear.errors.required">Expir Year is required</div>
+      <div *ngIf="expirYear.errors.maxlength">Please Enter a correct Year</div>
+    </div>
+
+    <div *ngIf="(cvv.touched || cvv.dirty )&& !cvv.valid">
+      <div *ngIf="cvv.errors.required">Expir Year is required</div>
+      <div *ngIf="cvv.errors.maxlength">Please Enter a correct Cvv</div>
+    </div>
+  </div>
+  <form ngForm #myForm="ngForm" (ngSubmit)="onSubmitCC(myForm)">
+    <div class="form-group">
+      <label class="control-label" for="cardNum">Card Number</label>
+      <input type="text" id="cardNum" ngModel name="cardNum" #cardNum="ngModel" class="form-control" minlength="1" required/>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="expirMonth">Expir Month</label>
+      <input placeholder="mm" type="text" id="expirMonth" ngModel name="expirMonth" #expirMonth="ngModel" class="form-control"
+        maxlength="2" required/>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="expirYear">Expir Year</label>
+      <input placeholder="YYYY" type="text" id="expirYear" ngModel name="expirYear" #expirYear="ngModel" class="form-control" maxlength="4"
+        required/>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label" for="cvv">Cvv</label>
+      <input placeholder="XXX" type="text" id="cvv" ngModel name="cvv" #cvv="ngModel" class="form-control" maxlength="3" required/>
+    </div>
+
+
+    <div class="text-center">
+      <button type="submit" [disabled]="myForm.invalid" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+
+<!-- view order 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+
+        <th class="col-md-1 text-center"> Order ID</th>
+        <th class="col-md-1 text-center"> Status</th>
+        <th class="col-md-1 text-center"> Created Date</th>
+        <th class="col-md-1 text-center"> Pay $</th>
+        <th class="col-md-1 text-center"> Fund ID</th>
+        <th class="col-md-1 text-center"> Buy Amount</th>
+        <th class="col-md-* text-center">Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let orderHis of orderHisList" class="text-center">
+        <!-- <td> -->
+        <!-- <button *ngIf="fund.ideaStatus == 'new'" type="button" class="btn btn-danger" (click)="disableIdea(idea,disableModal)">Disable </button> -->
+        <!-- <button *ngIf="cate.cateStatus as 'disabled'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Enable </button> -->
+        <!-- </td> -->
+        <td>{{orderHis.orderId}}</td>
+        <td>{{orderHis.orderStatus}}</td>
+        <td>{{orderHis.createOn}}</td>
+        <td>{{orderHis.payValue}}</td>
+        <td>{{orderHis.fundId}}</td>
+        <td>{{orderHis.buyAmount}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<br/>
+<br/>
+<!-- view cc 列表 -->
+<div>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let track of results | async">
+      <img src="{{track.thumbnail}}">
+      <a target="_blank" href="{{track.link}}">{{ track.track }}
+      </a>
+    </li>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+
+        <th class="col-md-1 text-center"> CC ID</th>
+        <th class="col-md-1 text-center"> Card Num</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cc of ccs" class="text-center">
+        <!-- <td> -->
+        <!-- <button *ngIf="fund.ideaStatus == 'new'" type="button" class="btn btn-danger" (click)="disableIdea(idea,disableModal)">Disable </button> -->
+        <!-- <button *ngIf="cate.cateStatus as 'disabled'" type="button" class="btn btn-danger" (click)="disableCate(cate,disableModal)">Enable </button> -->
+        <!-- </td> -->
+        <td>{{cc.ccId}}</td>
+        <td>{{cc.cardNum}}</td>
+         <td>
+            <button type="button" class="btn btn-info fa fa-edit" (click)="clearCart(cc)">Pay</button>
+            
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

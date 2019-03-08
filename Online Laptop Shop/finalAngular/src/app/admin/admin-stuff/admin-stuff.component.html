@@ -1,0 +1,56 @@
+<div class="card text-center mt-5">
+  <div class="card-header">
+    <h2>Create A New Admin</h2>
+  </div>
+  <div class="card-body">
+    <form ngForm #addForm="ngForm">
+      <div class="form-group">
+        <label class="control-label" for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control text-center" ngModel #username="ngModel" minlength="3"
+          pattern="[A-Z]|[a-z]|[0-9]" required />
+
+        <div *ngIf="username.invalid && (username.dirty || username.touched)" class="mt-2">
+          <div *ngIf="username.errors.required" class="alert alert-danger mb-1">
+            username is required
+          </div>
+          <div *ngIf="username.errors.minlength" class="alert alert-danger mb-1">
+            username must be more than 3 characters.
+          </div>
+          <div *ngIf="username.errors.pattern" class="alert alert-danger mb-1">
+            username must be letters or numbers.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control text-center" ngModel #password="ngModel" minlength="3"
+          required />
+
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="mt-2">
+          <div *ngIf="password.errors.required" class="alert alert-danger mb-1">
+            password is required
+          </div>
+          <div *ngIf="password.errors.minlength" class="alert alert-danger mb-1">
+            password must be more than 3 characters.
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer">
+    <button type="button" [disabled]="addForm.invalid" class="btn btn-primary btn-lg btn-block" (click)="onAddAdmin(replyModal,addForm)">Submit</button>
+  </div>
+</div>
+
+<ng-template #replyModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modal.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{message}}
+  </div>
+</ng-template>
